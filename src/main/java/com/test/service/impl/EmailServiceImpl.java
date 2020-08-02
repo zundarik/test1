@@ -5,7 +5,6 @@ import static java.lang.String.format;
 import com.test.domain.Email;
 import com.test.repository.EmailRepository;
 import com.test.service.EmailService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,11 +18,8 @@ public class EmailServiceImpl implements EmailService {
 
   @Override
   public Email create(String name) {
-    Optional<Email> email = emailRepository.findByNameIgnoreCase(name);
-    if (email.isPresent()) {
-      throw new ResponseStatusException(
-          HttpStatus.BAD_REQUEST,
-          format("Email with name '%s' already exist", name));
+    if (emailRepository.findByNameIgnoreCase(name).isPresent()) {
+      return null;
     }
     return update(new Email(name.toLowerCase()));
   }

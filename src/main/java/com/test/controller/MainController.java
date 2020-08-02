@@ -1,5 +1,6 @@
 package com.test.controller;
 
+import com.test.domain.ErrorResponse;
 import com.test.service.EmailService;
 import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,11 @@ public class MainController {
   public ResponseEntity<?> email(
       @RequestBody EmailRequest emailRequest) {
 
-    return ResponseEntity.ok(emailService.create(emailRequest.getEmail()));
+    if (emailService.create(emailRequest.getEmail()) != null) {
+      return ResponseEntity.ok().build();
+    } else {
+      return ResponseEntity.badRequest().body(new ErrorResponse(true));
+    }
   }
 
   @Getter
